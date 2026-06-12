@@ -49,6 +49,44 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .n-ghost:hover{background:var(--cream2)}
 .n-cta{background:var(--ink);color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'Geist',sans-serif;transition:all .25s}
 .n-cta:hover{background:#222;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.n-hamburger{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--rule2);border-radius:10px;background:#fff;color:var(--ink);transition:background .2s,border-color .2s}
+.n-hamburger:hover{background:var(--cream2)}
+.n-hamburger span{display:block;width:18px;height:2px;background:currentColor;border-radius:99px;transition:transform .25s ease,opacity .2s ease}
+.n-hamburger span+span{margin-top:5px}
+
+.mnav-backdrop{
+  position:fixed;inset:0;z-index:520;
+  background:rgba(13,13,13,.35);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+}
+.mnav-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:530;
+  width:min(86vw,320px);max-width:100%;
+  background:var(--cream);
+  border-left:1px solid var(--rule);
+  transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+  padding:84px 16px 20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.mnav-links{display:flex;flex-direction:column;gap:4px}
+.mnav-links a{
+  min-height:44px;display:flex;align-items:center;
+  text-decoration:none;color:var(--ink2);font-size:16px;
+  border-radius:8px;padding:0 12px;
+}
+.mnav-links a:hover{background:var(--cream2);color:var(--ink)}
+.mnav-actions{display:grid;gap:10px}
+.mnav-actions .n-ghost,.mnav-actions .n-cta{width:100%;min-height:44px}
+.mnav-yc{display:inline-flex;align-items:center;justify-content:center;min-height:32px}
+
+body.mnav-open{overflow:hidden}
+body.mnav-open .mnav-backdrop{opacity:1;pointer-events:auto}
+body.mnav-open .mnav-drawer{transform:translateX(0)}
+body.mnav-open .n-hamburger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.mnav-open .n-hamburger span:nth-child(2){opacity:0}
+body.mnav-open .n-hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
 /* ─────────────────────────────────────────
    HERO B  —  Centered layout
@@ -1836,6 +1874,8 @@ footer{background:var(--ink);padding:68px 40px 34px}
   nav{height:auto;min-height:64px;padding:10px 16px;align-items:flex-start}
   .n-links,.n-yc{display:none}
   .n-right{gap:6px;margin-left:auto}
+  .n-right .n-ghost,.n-right .n-cta{display:none}
+  .n-hamburger{display:inline-flex}
   .n-ghost,.n-cta,.btn-ink,.btn-wire,.ctaw,.ctao,.pcta,.abtn,.rptact,.faqq,.am-google{min-height:44px}
   .n-ghost,.n-cta{padding:10px 14px}
   .hb-inner{padding:92px 16px 0}
@@ -1855,6 +1895,7 @@ footer{background:var(--ink);padding:68px 40px 34px}
 @media(max-width:480px){
   nav{padding:10px 12px}
   .n-ghost,.n-cta{font-size:12px;padding:10px 12px}
+  .mnav-drawer{width:100%}
   .hb-inner{padding:88px 12px 0}
   .hb-h{font-size:clamp(28px,11vw,36px)}
   .hb-p{font-size:14px}
@@ -1892,8 +1933,26 @@ footer{background:var(--ink);padding:68px 40px 34px}
     <div class="n-yc">YC S25</div>
     <button class="n-ghost" onclick="openAuth('signin')">Sign in</button>
     <button class="n-cta" onclick="openAuth('signup')">Get Started →</button>
+    <button class="n-hamburger" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mnav-drawer">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="mnav-backdrop" id="mnav-backdrop"></div>
+<aside class="mnav-drawer" id="mnav-drawer" aria-hidden="true">
+  <div class="mnav-links">
+    <a href="#how">How it works</a>
+    <a href="#sample">Sample Report</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="mnav-actions">
+    <div class="n-yc mnav-yc">YC S25</div>
+    <button class="n-ghost" onclick="openAuth('signin')">Sign in</button>
+    <button class="n-cta" onclick="openAuth('signup')">Get Started →</button>
+  </div>
+</aside>
 
 <main>
 
@@ -3612,9 +3671,43 @@ window.copyShareLink = function(){
   });
 })();
 
+/* Mobile nav */
+(function(){
+  var body = document.body;
+  var toggle = document.querySelector('.n-hamburger');
+  var drawer = document.getElementById('mnav-drawer');
+  var backdrop = document.getElementById('mnav-backdrop');
+  if(!toggle || !drawer || !backdrop) return;
+
+  function setMobileNav(open){
+    body.classList.toggle('mnav-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    drawer.setAttribute('aria-hidden', String(!open));
+  }
+
+  window.closeMobileNav = function(){ setMobileNav(false); };
+
+  toggle.addEventListener('click', function(){
+    setMobileNav(!body.classList.contains('mnav-open'));
+  });
+
+  backdrop.addEventListener('click', function(){ setMobileNav(false); });
+  drawer.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){ setMobileNav(false); });
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') setMobileNav(false);
+  });
+
+  window.addEventListener('resize', function(){
+    if(window.innerWidth>768) setMobileNav(false);
+  }, { passive:true });
+})();
+
 /* FAQ anchor nav */
 (function(){
-  var navLinks = document.querySelectorAll('.n-links a');
+  var navLinks = document.querySelectorAll('.n-links a, .mnav-links a');
   navLinks.forEach(function(a){
     a.addEventListener('click', function(e){
       var href = a.getAttribute('href');
@@ -3622,6 +3715,7 @@ window.copyShareLink = function(){
         e.preventDefault();
         var target = document.querySelector(href);
         if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+        if(typeof window.closeMobileNav==='function') window.closeMobileNav();
       }
     });
   });
