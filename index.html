@@ -1817,6 +1817,60 @@ footer{background:var(--ink);padding:68px 40px 34px}
   .nd-left{display:none}
   .nd-bottom{grid-template-columns:1fr}
 }
+
+/* Mobile responsiveness refinements */
+@media(max-width:1024px){
+  nav{padding:0 24px}
+  .n-links{gap:16px}
+  #hero-b{overflow-x:hidden}
+  #dash-glow-b{width:90vw;max-width:1000px}
+  .hb-inner{padding:88px 28px 0}
+  .hb-dash-wrap{width:100%;max-width:100%;margin-bottom:-56px}
+  .nd-wrap{flex-direction:column}
+  .nd-left{width:100%;border-right:none;border-bottom:1px solid var(--rule)}
+  .nd-nav-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:0 12px 8px}
+  .nd-nav-item{padding:10px}
+}
+
+@media(max-width:768px){
+  nav{height:auto;min-height:64px;padding:10px 16px;align-items:flex-start}
+  .n-links,.n-yc{display:none}
+  .n-right{gap:6px;margin-left:auto}
+  .n-ghost,.n-cta,.btn-ink,.btn-wire,.ctaw,.ctao,.pcta,.abtn,.rptact,.faqq,.am-google{min-height:44px}
+  .n-ghost,.n-cta{padding:10px 14px}
+  .hb-inner{padding:92px 16px 0}
+  .hb-h{font-size:clamp(32px,10vw,44px);letter-spacing:-1px}
+  .hb-p{font-size:15px;line-height:1.6;margin-bottom:24px}
+  .hb-btns{width:100%;gap:10px}
+  .hb-btns .btn-ink,.hb-btns .btn-wire{width:100%;justify-content:center}
+  .hb-dash-wrap{margin-bottom:-24px}
+  .hb-titlebar{padding:10px 12px}
+  .hb-url{max-width:160px;margin:0 8px}
+  .nd-main{padding:14px}
+  .nd-top{flex-direction:column;align-items:flex-start;gap:12px}
+  .featgrid,.testigrid,.plans,.sgrid,.dmscores,.ftgrid{grid-template-columns:1fr}
+  section{padding:64px 16px}
+}
+
+@media(max-width:480px){
+  nav{padding:10px 12px}
+  .n-ghost,.n-cta{font-size:12px;padding:10px 12px}
+  .hb-inner{padding:88px 12px 0}
+  .hb-h{font-size:clamp(28px,11vw,36px)}
+  .hb-p{font-size:14px}
+  .hb-pill{padding:6px 10px;gap:6px}
+  .hb-pill-text{font-size:11px}
+  .hb-dash-wrap{margin-bottom:-12px}
+  .hb-titlebar{padding:8px 10px}
+  .hb-dd{width:9px;height:9px}
+  .hb-url{max-width:120px;font-size:9px;padding:4px 8px}
+  .nd-main{padding:12px}
+  .nd-bars,.nd-ai{padding:10px}
+  .nd-bar-lbl{width:74px;font-size:9px}
+  .nd-bar-v{width:18px;font-size:9px}
+  section{padding:56px 12px}
+  #cta{padding:72px 12px}
+}
 /* ══ end nd-* ══════════════════════════════════════════════ */
 </style>
 </head>
